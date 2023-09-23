@@ -1,5 +1,9 @@
 //GAME VARIABLES
 
+var screenWidth = window.screen.width;
+
+
+console.log(screenWidth);
 var level = 1;
 
 var color_list = ['green', 'red', 'yellow', 'blue'];
@@ -63,7 +67,7 @@ function wrong_answer(){
 
 
 };
-
+ 
 //START GAME (first Load)
 $("html").keydown(function(){
     $("."+color).stop().animate({ opacity: 0 },100, function() {
@@ -71,7 +75,7 @@ $("html").keydown(function(){
 
         cpuButtons.push(color);
 
-        $("#title").html("<h1 id=title>Level " + level + "</h1>")
+        $("#title").html("<h1 id='title'>Level " + level + "</h1>")
         playSound(color);
         
         addKeyPressFeature();
@@ -82,11 +86,26 @@ $("html").keydown(function(){
         });
 });
 
+if (screenWidth<=500){
+    $("#title").click(function(){
+        $("."+color).stop().animate({ opacity: 0 },100, function() {
+            $(this).animate({ opacity: 1 },100);
+    
+            cpuButtons.push(color);
+    
+            $("#title").html("<h1 id='title'>Level " + level + "</h1>")
+            playSound(color);
+    
+            $("#title").off("click");
+    });
+});
+};
+
 //FUNTION THAT ADDS ONE COLOR TO THE EXISTING SERIES(with animation)
 function newRound(cpuButtons){
 
     level++;
-    $("#title").html("<h1 id=title>Level " + level + "</h1>")
+    $("#title").html("<h1 id='title'>Level " + level + "</h1>")
 
     userButtons = [];
 
@@ -171,13 +190,18 @@ function handleClick(color){
 
 function resetGame(){
 
+    screenWidth = window.screen.width;
+
+    num = Math.floor(Math.random()*4);
+    color = color_list[num];
+
     $("html").keydown(function(){
-        num = Math.floor(Math.random()*4);
-        color = color_list[num];
+        
 
         $("."+color).stop().animate({ opacity: 0 },100, function() {
             $(this).animate({ opacity: 1 },100);
-            
+            });
+
             level = 1;
             userButtons = [];
             cpuButtons = [];
@@ -185,14 +209,37 @@ function resetGame(){
             playSound(color);
 
     
-            $("#title").html("<h1 id=title>Level " + level +"</h1>")
+            $("#title").html("<h1 id='title'>Level " + level +"</h1>")
             addKeyPressFeature();
             
+            $("#title").off("click");
             $("html").off("keydown");
-
+        
             
         });
-    });
+
+            if (screenWidth<=500){
+                $("#title").click(function(){
+
+                $("."+color).stop().animate({ opacity: 0 },100, function() {
+                $(this).animate({ opacity: 1 },100);
+                });
+                
+                level = 1;
+                userButtons = [];
+                cpuButtons = [];
+                cpuButtons.push(color);
+                playSound(color);
+
+        
+                $("#title").html("<h1 id='title'>Level " + level +"</h1>")
+                addKeyPressFeature();
+                
+                $("#title").off("click");
+                $("html").off("keydown");
+                });
+
+            };
 };
 
 
